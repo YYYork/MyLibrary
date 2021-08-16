@@ -10,19 +10,14 @@ import mySQLManager.DBmanager;
 public class SQLHelper {
 	private Connection con = null;
 	private PreparedStatement ps = null;
-	public SQLHelper(String sql,Object... objects) {
+	public SQLHelper(String sql,Object... objects) throws SQLException {
 		con = DBmanager.getConnection();
-		try {
 			ps = con.prepareStatement(sql);
 			int i=1;
 			for(Object object:objects) {
 				setObject(i,object);
 				i++;
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	public SQLHelper(String sqls[],Object objects[][]) {
@@ -37,44 +32,22 @@ public class SQLHelper {
 		return ps;
 	}
 	
-	public ResultSet useSQLtoQuery() {
-		try {
+	public ResultSet useSQLtoQuery() throws SQLException {
 			return ps.executeQuery();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
-	public boolean useSQLtoexecute() {
-		try {
+	public boolean useSQLtoexecute() throws SQLException {
 			return ps.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return false;
 	}
 	
-	public void close() {
+	public void close() throws SQLException {
 		if(ps!=null) {
-			try {
 				ps.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		if(con!=null) {
-			try {
 				con.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
+}
 	
 	private void setObject(int index,Object object) throws SQLException {
 		if(object instanceof String) {
