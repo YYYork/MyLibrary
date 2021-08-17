@@ -12,25 +12,25 @@ import myObject.Book;
 import myObject.Reader;
 
 public class DBmanager {
-	public static Connection getConnection() {// µÃµ½ºÍÊı¾İ¿âµÄÁ¬½Ó
+	public static Connection getConnection() {// å¾—åˆ°å’Œæ•°æ®åº“çš„è¿æ¥
 		Connection con;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			System.out.println("Êı¾İ¿âÇı¶¯¼ÓÔØ´íÎó");
+			System.out.println("æ•°æ®åº“é©±åŠ¨åŠ è½½é”™è¯¯");
 			e.printStackTrace();
 		}
 		try {
-			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/myLibrary", "root", "Dyk20050119.");
+			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/myLibrary", "root", "root");
 			return con;
 		} catch (SQLException e) {
-			System.out.println("Êı¾İ¿âÁ¬½ÓÊ§°Ü");
+			System.out.println("æ•°æ®åº“è¿æ¥å¤±è´¥");
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	public static LoginState CheckLogin(String account, String password) {// ÑéÖ¤µÇÂ½
+	public static LoginState CheckLogin(String account, String password) {// éªŒè¯ç™»é™†
 		Connection con = getConnection();
 		PreparedStatement ps = null;
 		try {
@@ -71,7 +71,7 @@ public class DBmanager {
 		return LoginState.UNKNOWN_EXCEPTION;
 	}
 
-	public static RegisterState RegAccount(String account, String password) {// ×¢²áÕËºÅ
+	public static RegisterState RegAccount(String account, String password) {// æ³¨å†Œè´¦å·
 		Connection con = getConnection();
 		PreparedStatement ps = null;
 		PreparedStatement ps2 = null;
@@ -84,9 +84,9 @@ public class DBmanager {
 				ps2.setString(1, account);
 				ps2.setString(2, password);
 				ps2.execute();
-				return RegisterState.ACCOUNT_SUCCESS_REGISTER;// ÕËºÅ³É¹¦×¢²á
+				return RegisterState.ACCOUNT_SUCCESS_REGISTER;// è´¦å·æˆåŠŸæ³¨å†Œ
 			} else {
-				return RegisterState.ACCOUNT_EXIST;// ÕËºÅ´æÔÚ
+				return RegisterState.ACCOUNT_EXIST;// è´¦å·å­˜åœ¨
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -117,10 +117,10 @@ public class DBmanager {
 				}
 			}
 		}
-		return RegisterState.UNKNOWN_EXCEPTION; // Î´Öª´íÎó
+		return RegisterState.UNKNOWN_EXCEPTION; // æœªçŸ¥é”™è¯¯
 	}
 
-	public static boolean isAdmin(String account) {// ÅĞ¶ÏÊÇ²»ÊÇ¹ÜÀíÔ±
+	public static boolean isAdmin(String account) {// åˆ¤æ–­æ˜¯ä¸æ˜¯ç®¡ç†å‘˜
 		Connection con = getConnection();
 		PreparedStatement ps = null;
 		try {
@@ -150,7 +150,7 @@ public class DBmanager {
 				}
 			}
 		}
-		return false;// Î´Öª´íÎó£¬¾Í²»ÊÇ¹ÜÀíÔ±
+		return false;// æœªçŸ¥é”™è¯¯ï¼Œå°±ä¸æ˜¯ç®¡ç†å‘˜
 	}
 
 	public static Reader getReader(String account, WayOfGetReader way) {
@@ -200,7 +200,7 @@ public class DBmanager {
 			ps = con.prepareStatement("select * from BookBorrowRecord where BorrowAccount = ?");
 			ps.setString(1, reader.getAccount());
 			ResultSet res = ps.executeQuery();
-			while(res.next()) {//°ÑÊé·ÅÈëListÖĞ
+			while(res.next()) {//æŠŠä¹¦æ”¾å…¥Listä¸­
 				String bookID = res.getString("BookID");
 				Book getBooks[] = BookFinder.getBooks(BookFinderType.SEARCH_FOR_ID, bookID);
 				for(Book book:getBooks) {
@@ -212,7 +212,7 @@ public class DBmanager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return books;//Ã»ÕÒµ½Êé
+		return books;//æ²¡æ‰¾åˆ°ä¹¦
 		
 	}
 }
