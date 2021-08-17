@@ -29,8 +29,8 @@ public class BookBorrowPanel extends JPanel{
 	private JTextField field_bookID;
 	private JTable table;
 	private JSplitPane splitPane;
-	private String colNames[] = {"ID","ÊéÃû","ÖÖÀà","³ö°æÉç","ÊÇ·ñ½è³ö"};
-	private String Books[][] = {{"Ä¬ÈÏ","Ä¬ÈÏ","Ä¬ÈÏ","Ä¬ÈÏ","Ä¬ÈÏ"}};
+	private String colNames[] = {"ID","ä¹¦å","ç§ç±»","å‡ºç‰ˆç¤¾","æ˜¯å¦å€Ÿå‡º"};
+	private String Books[][] = {{"é»˜è®¤","é»˜è®¤","é»˜è®¤","é»˜è®¤","é»˜è®¤"}};
 	private Book getbooks[];
 	
 	public BookBorrowPanel() {
@@ -42,12 +42,13 @@ public class BookBorrowPanel extends JPanel{
 		
 		tablePanel = new JScrollPane(table);
 		
-		btn_Search = new JButton("ËÑË÷ID");
+		btn_Search = new JButton("æœç´¢ID");
 		
-		btn_Borrow = new JButton("½èÊé");
+		btn_Borrow = new JButton("å€Ÿä¹¦");
+		btn_Borrow.setEnabled(false);
 		
 		field_bookID = new JTextField();
-		field_bookID.setToolTipText("ÊäÈëÊéµÄID");
+		field_bookID.setToolTipText("è¾“å…¥ä¹¦çš„ID");
 		
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		
@@ -81,11 +82,12 @@ public class BookBorrowPanel extends JPanel{
 				if(id.equals(""))
 					return;
 				getbooks = BookFinder.getBooks(BookFinderType.SEARCH_FOR_ID, id);
-				if(getbooks.equals(null)) {
-					JOptionPane.showMessageDialog(LoginFrame.instance, "²éÎŞ´ËÊé£¡");//µ¯³öĞ¡¶Ô»°¿ò
+				if(getbooks == null) {
+					JOptionPane.showMessageDialog(MainFrame.instance, "æŸ¥æ— æ­¤ä¹¦ï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
 					return;
 				}
 				Books = BookToArrays.booktoArrays(getbooks);
+				btn_Borrow.setEnabled(true);
 			}
 		});
 		
@@ -101,9 +103,11 @@ public class BookBorrowPanel extends JPanel{
 				Book book = getbooks[index];
 				if(!book.getisBorrowed()) {
 				BookAdder.setBookBorrowState(book, true);
+				BookAdder.addBookBorrowRecord(MainFrame.instance.getReader(),book);
 				}else {
-					JOptionPane.showMessageDialog(LoginFrame.instance, "´ËÊéÒÑ½è³ö£¡");//µ¯³öĞ¡¶Ô»°¿ò
+					JOptionPane.showMessageDialog(MainFrame.instance, "æ­¤ä¹¦å·²å€Ÿå‡ºï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
 				}
+				btn_Borrow.setEnabled(false);
 			}
 		});
 	}
