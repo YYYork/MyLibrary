@@ -19,7 +19,11 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import myObject.Reader;
+
 public class MainFrame extends JFrame{
+	public static MainFrame instance;
+	private Reader reader;
 	private Container c;
 	private JPanel mainPane;
 	private JLabel label_Img;
@@ -27,37 +31,61 @@ public class MainFrame extends JFrame{
 	private JButton btn_BookCheck;
 	private JButton btn_BookReturn;
 	private JTextArea area_Announce;
-	//¹ÜÀíÔ±²Ëµ¥
+	//ç®¡ç†å‘˜èœå•
 	private JMenuBar bar;
 	private JMenuItem basic_Data_Maintain_Menu;
 	private JMenuItem book_Borrow_Manager_Menu;
 	private JMenuItem newbook_Order_Manager_Menu;
 	private JMenuItem systrem_Maintain_Manager_Menu;
-	//Ãæ°å
+	//é¢æ¿
 	private BookSearchPanel searchPanel;
 	private BookBorrowPanel borrowPanel;
+	private BookReturnPanel returnPanel;
 	
-	public MainFrame(boolean isAdmin,String name) {
+	public MainFrame(Reader reader) {
+		instance = this;
+		this.reader = reader;
 		defaultSetting();
-		if(isAdmin) {
-			setTitle("»¶Ó­Äú,¹ÜÀíÔ±£º"+name);
+		if(reader.isAdmin()) {
+			setTitle("æ¬¢è¿æ‚¨,ç®¡ç†å‘˜ï¼š" + reader.getName());
 			adminSetting();
 		}else {
-			setTitle("»¶Ó­Äú,ÓÃ»§£º"+name);
+			setTitle("æ¬¢è¿æ‚¨,ç”¨æˆ·ï¼š" + reader.getName());
 			guestSetting();
 		}
 	}
 	
-	private void guestSetting() {//³õÊ¼»¯ÓÃ»§µÄMenuBar
+	public Reader getReader() {
+		return reader;
+	}
+
+	private void guestSetting() {//åˆå§‹åŒ–ç”¨æˆ·çš„MenuBar
 		bar = new JMenuBar();
 		
-		book_Borrow_Manager_Menu = new JMenuItem("Í¼Êé½èÔÄ¹ÜÀí");
+		book_Borrow_Manager_Menu = new JMenuItem("å›¾ä¹¦å€Ÿé˜…ç®¡ç†");
 		book_Borrow_Manager_Menu.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				if(mainPane.isVisible()) {
+					return;
+				}
+				if(returnPanel.isVisible()) {
+					returnPanel.setVisible(false);
+					mainPane.setVisible(true);
+					return;
+				}
+				if(borrowPanel.isVisible()) {
+					borrowPanel.setVisible(false);
+					mainPane.setVisible(true);
+					return;
+				}
+				if(searchPanel.isVisible()) {
+					searchPanel.setVisible(false);
+					mainPane.setVisible(true);
+					return;
+				}
 			}
 		});
 		
@@ -67,10 +95,11 @@ public class MainFrame extends JFrame{
 		
 	}
 	
-	private void defaultSetting() {//³õÊ¼»¯Ö÷²Ëµ¥¸÷×é¼ş
+	private void defaultSetting() {//åˆå§‹åŒ–ä¸»èœå•å„ç»„ä»¶
 		
 		searchPanel = new BookSearchPanel();
 		borrowPanel = new BookBorrowPanel();
+		returnPanel = new BookReturnPanel();
 		
 		setBounds(300,300,1600,800);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -88,23 +117,23 @@ public class MainFrame extends JFrame{
 		label_Img.setBorder(BorderFactory.createLineBorder(Color.black));
 		label_Img.setBounds(59,164,431,460);
 		
-		btn_BookBorrow = new JButton("Í¼Êé½èÔÄ");
+		btn_BookBorrow = new JButton("å›¾ä¹¦å€Ÿé˜…");
 		btn_BookBorrow.setBackground(Color.gray);
 		btn_BookBorrow.setBounds(620,131,359,105);
 		
-		btn_BookCheck = new JButton("Í¼Êé²éÑ¯");
+		btn_BookCheck = new JButton("å›¾ä¹¦æŸ¥è¯¢");
 		btn_BookCheck.setBackground(Color.gray);
 		btn_BookCheck.setBounds(620,358,359,105);
 		
-		btn_BookReturn = new JButton("Í¼Êé¹é»¹");
+		btn_BookReturn = new JButton("å›¾ä¹¦å½’è¿˜");
 		btn_BookReturn.setBackground(Color.gray);
 		btn_BookReturn.setBounds(620,560,359,105);
 		
 		area_Announce = new JTextArea();
 		area_Announce.setEditable(false);
 		area_Announce.setBorder(BorderFactory.createLineBorder(Color.black));
-		area_Announce.setText("                          ¹«¸æ");
-		area_Announce.setFont(new Font("Î¢ÈíÑÅºÚ",Font.BOLD,25));
+		area_Announce.setText("                          å…¬å‘Š");
+		area_Announce.setFont(new Font("å¾®è½¯é›…é»‘",Font.BOLD,25));
 		area_Announce.setBounds(1126, 61, 419, 658);
 		
 		btnActionListenerAdder();
@@ -117,11 +146,12 @@ public class MainFrame extends JFrame{
 		c.add(mainPane);
 		c.add(searchPanel);
 		c.add(borrowPanel);
+		c.add(returnPanel);
 		
 		setVisible(true);
 	} 
 	
-	private void btnActionListenerAdder() {//¸ø°´Å¥Ìí¼Ó¼àÌı
+	private void btnActionListenerAdder() {//ç»™æŒ‰é’®æ·»åŠ ç›‘å¬
 		
 		btn_BookBorrow.addActionListener(new ActionListener() {
 			
@@ -149,27 +179,45 @@ public class MainFrame extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				mainPane.setVisible(false);
+				returnPanel.setVisible(true);
 			}
 		});
 		
 	}
 	
-	private void adminSetting() {//³õÊ¼»¯¹ÜÀíÔ±µÄMenuBar
+	private void adminSetting() {//åˆå§‹åŒ–ç®¡ç†å‘˜çš„MenuBar
 		
 		bar = new JMenuBar();
 		
-		book_Borrow_Manager_Menu = new JMenuItem("Í¼Êé½èÔÄ¹ÜÀí");
+		book_Borrow_Manager_Menu = new JMenuItem("å›¾ä¹¦å€Ÿé˜…ç®¡ç†");
 		book_Borrow_Manager_Menu.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				if(mainPane.isVisible()) {
+					return;
+				}
+				if(returnPanel.isVisible()) {
+					returnPanel.setVisible(false);
+					mainPane.setVisible(true);
+					return;
+				}
+				if(borrowPanel.isVisible()) {
+					borrowPanel.setVisible(false);
+					mainPane.setVisible(true);
+					return;
+				}
+				if(searchPanel.isVisible()) {
+					searchPanel.setVisible(false);
+					mainPane.setVisible(true);
+					return;
+				}
 			}
 		});
 		
-		basic_Data_Maintain_Menu = new JMenuItem("»ù´¡Êı¾İÎ¬»¤");
+		basic_Data_Maintain_Menu = new JMenuItem("åŸºç¡€æ•°æ®ç»´æŠ¤");
 		basic_Data_Maintain_Menu.addActionListener(new ActionListener() {
 			
 			@Override
@@ -179,7 +227,7 @@ public class MainFrame extends JFrame{
 			}
 		});
 		
-		newbook_Order_Manager_Menu = new JMenuItem("ĞÂÊé¶©¹º¹ÜÀí");
+		newbook_Order_Manager_Menu = new JMenuItem("æ–°ä¹¦è®¢è´­ç®¡ç†");
 		newbook_Order_Manager_Menu.addActionListener(new ActionListener() {
 			
 			@Override
@@ -189,7 +237,7 @@ public class MainFrame extends JFrame{
 			}
 		});
 		
-		systrem_Maintain_Manager_Menu = new JMenuItem("ÏµÍ³Î¬»¤¹ÜÀí");
+		systrem_Maintain_Manager_Menu = new JMenuItem("ç³»ç»Ÿç»´æŠ¤ç®¡ç†");
 		systrem_Maintain_Manager_Menu.addActionListener(new ActionListener() {
 			
 			@Override
