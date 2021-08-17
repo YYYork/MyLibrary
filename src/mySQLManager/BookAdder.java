@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import myObject.Book;
+import myObject.Reader;
+import myUtils.UseSQL;
 
 public class BookAdder {
 	public static boolean addBook(Book book) {
@@ -75,5 +77,13 @@ public class BookAdder {
 				}
 			}
 		}
+	}
+	
+	public static void addBookBorrowRecord(Reader reader,Book book) {
+		UseSQL.useSQLToExecute("INSERT INTO BookBorrowRecord (BookID,BorrowAccount) VALUES (?,?)",book.getId(),reader.getAccount());
+	}
+	
+	public static void delBookBorrowRecord(Reader reader,Book book) {
+		UseSQL.useSQLToExecute("DELETE FROM BookBorrowRecord WHERE BookID = ?",book.getId());
 	}
 }

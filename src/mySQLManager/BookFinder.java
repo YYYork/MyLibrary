@@ -32,13 +32,13 @@ public class BookFinder {
 			}
 			if(type.equals(BookFinderType.SEARCH_FOR_TYPE)) {
 				ps = con.prepareStatement("select * from Books where BookType = ?");
-				res = ps.executeQuery();
 				ps.setString(1, str);
+				res = ps.executeQuery();
 				while(res.next()) {
 					String bookName = res.getString("BookName");
 					String bookType = res.getString("bookType");
 					String Publisher = res.getString("Publisher");
-					String bookid = res.getString("BookID ");
+					String bookid = res.getString("BookID");
 					boolean isBorrowed = res.getBoolean("isBorrowed");
 					books[account] = new Book(bookName,bookType,Publisher,bookid,isBorrowed);
 					account++;
@@ -47,8 +47,8 @@ public class BookFinder {
 			}
 			if(type.equals(BookFinderType.SEARCH_FOR_PUBLISHER)) {
 				ps = con.prepareStatement("select * from Books where Publisher = ?");
-				res = ps.executeQuery();
 				ps.setString(1, str);
+				res = ps.executeQuery();
 				while(res.next()) {
 					String bookName = res.getString("BookName");
 					String bookType = res.getString("bookType");
@@ -63,8 +63,8 @@ public class BookFinder {
 			
 			if(type.equals(BookFinderType.SEARCH_FOR_ID)) {
 				ps = con.prepareStatement("select * from Books where BookID = ?");
-				res = ps.executeQuery();
 				ps.setString(1, str);
+				res = ps.executeQuery();
 				while(res.next()) {
 					String bookName = res.getString("BookName");
 					String bookType = res.getString("bookType");
