@@ -14,13 +14,14 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import myObject.Reader;
 import mySQLManager.DBmanager;
 import mySQLManager.LoginState;
 import mySQLManager.RegisterState;
+import mySQLManager.WayOfGetReader;
 
 public class LoginFrame extends JFrame{
-	public static LoginFrame instance;
-	//µÇÂ½½çÃæ×é¼ş
+	//ç™»é™†ç•Œé¢ç»„ä»¶
 	private Container c;
 	private JLabel title_label;
 	private JPanel login;
@@ -31,7 +32,7 @@ public class LoginFrame extends JFrame{
 	private JLabel label_account;
 	private JPasswordField password;
 	private JLabel label_password;
-	//×¢²á½çÃæ×é¼ş
+	//æ³¨å†Œç•Œé¢ç»„ä»¶
 	private JLabel title_reglabel;
 	private JPanel register;
 	private JTextField reg_account;
@@ -45,34 +46,33 @@ public class LoginFrame extends JFrame{
 	
 	public LoginFrame() {
 		LoginFramePreSetting();
-		instance = this;
 	}
 	
-	private void LoginFramePreSetting() {//µÇÂ½½çÃæ³õÊ¼»¯
+	private void LoginFramePreSetting() {//ç™»é™†ç•Œé¢åˆå§‹åŒ–
 		setBounds(600, 150, 550, 800);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setTitle("Ñ¼ÀæÍ¼Êé¹İ¡ª¡ªµÇÂ½½çÃæ");
+		setTitle("é¸­æ¢¨å›¾ä¹¦é¦†â€”â€”ç™»é™†ç•Œé¢");
 		setResizable(false);
 		c = getContentPane();
 		c.setLayout(null);
 		
-		title_label = new JLabel("Ñ¼ÀæÍ¼Êé¹İ");
-		title_label.setFont(new Font("Î¢ÈíÑÅºÚ",Font.BOLD,30));
+		title_label = new JLabel("é¸­æ¢¨å›¾ä¹¦é¦†");
+		title_label.setFont(new Font("å¾®è½¯é›…é»‘",Font.BOLD,30));
 		title_label.setBounds(200,0,200,200);
 		
 		login = new JPanel();
 		login.setBounds(0, 0, 550, 800);
 		login.setLayout(null);
 		
-		login_btn = new JButton("µÇÂ¼");
+		login_btn = new JButton("ç™»å½•");
 		login_btn.setBackground(Color.gray);
 		login_btn.setBounds(128, 448, 354, 70);
 		
-		reg_btn = new JButton("×¢²á");
+		reg_btn = new JButton("æ³¨å†Œ");
 		reg_btn.setBackground(Color.gray);
 		reg_btn.setBounds(128, 549, 352, 35);
 		
-		forgot_btn = new JButton("Íü¼ÇÃÜÂë");
+		forgot_btn = new JButton("å¿˜è®°å¯†ç ");
 		forgot_btn.setBackground(Color.gray);
 		forgot_btn.setBounds(128, 649, 352, 35);
 		
@@ -82,12 +82,12 @@ public class LoginFrame extends JFrame{
 		password = new JPasswordField();
 		password.setBounds(128,330,354,76);
 		
-		label_account = new JLabel("ÕËºÅ£º");
-		label_account.setFont(new Font("Î¢ÈíÑÅºÚ",Font.BOLD,25));
+		label_account = new JLabel("è´¦å·ï¼š");
+		label_account.setFont(new Font("å¾®è½¯é›…é»‘",Font.BOLD,25));
 		label_account.setBounds(21, 199, 100, 60);
 		
-		label_password = new JLabel("ÃÜÂë£º");
-		label_password.setFont(new Font("Î¢ÈíÑÅºÚ",Font.BOLD,25));
+		label_password = new JLabel("å¯†ç ï¼š");
+		label_password.setFont(new Font("å¾®è½¯é›…é»‘",Font.BOLD,25));
 		label_password.setBounds(21,343,100,60);
 		AddLoginComponentListener();
 		
@@ -106,10 +106,10 @@ public class LoginFrame extends JFrame{
 		setVisible(true);
 	}
 	
-	private void RegisterPanelPreSetting() {//×¢²á½çÃæ³õÊ¼»¯
+	private void RegisterPanelPreSetting() {//æ³¨å†Œç•Œé¢åˆå§‹åŒ–
 		
-		title_reglabel = new JLabel("ÕËºÅ×¢²á");
-		title_reglabel.setFont(new Font("Î¢ÈíÑÅºÚ",Font.BOLD,30));
+		title_reglabel = new JLabel("è´¦å·æ³¨å†Œ");
+		title_reglabel.setFont(new Font("å¾®è½¯é›…é»‘",Font.BOLD,30));
 		title_reglabel.setForeground(Color.BLUE);
 		title_reglabel.setBounds(230,0,200,200);
 		
@@ -120,8 +120,8 @@ public class LoginFrame extends JFrame{
 		reg_account = new JTextField();
 		reg_account.setBounds(128, 199, 354, 76);
 		
-		label_regaccount = new JLabel("ÕËºÅ£º");
-		label_regaccount.setFont(new Font("Î¢ÈíÑÅºÚ",Font.BOLD,25));
+		label_regaccount = new JLabel("è´¦å·ï¼š");
+		label_regaccount.setFont(new Font("å¾®è½¯é›…é»‘",Font.BOLD,25));
 		label_regaccount.setBounds(21, 199, 100, 60);
 		
 		reg_password = new JPasswordField();
@@ -130,19 +130,19 @@ public class LoginFrame extends JFrame{
 		reg_password2 = new JPasswordField();
 		reg_password2.setBounds(128,420,354,76);
 		
-		label_regpassword = new JLabel("ÃÜÂë£º");
-		label_regpassword.setFont(new Font("Î¢ÈíÑÅºÚ",Font.BOLD,25));
+		label_regpassword = new JLabel("å¯†ç ï¼š");
+		label_regpassword.setFont(new Font("å¾®è½¯é›…é»‘",Font.BOLD,25));
 		label_regpassword.setBounds(21,343,100,60);
 		
-		label_regpassword2 = new JLabel("ÇëÔÙÊäÈëÒ»´ÎÃÜÂë£º");
-		label_regpassword2.setFont(new Font("Î¢ÈíÑÅºÚ",Font.BOLD,10));
+		label_regpassword2 = new JLabel("è¯·å†è¾“å…¥ä¸€æ¬¡å¯†ç ï¼š");
+		label_regpassword2.setFont(new Font("å¾®è½¯é›…é»‘",Font.BOLD,10));
 		label_regpassword2.setBounds(21,443,100,60);
 		
-		reg_ensure_btn = new JButton("×¢²á");
+		reg_ensure_btn = new JButton("æ³¨å†Œ");
 		reg_ensure_btn.setBackground(Color.gray);
 		reg_ensure_btn.setBounds(128, 548, 354, 70);
 		
-		reg_cancel_btn = new JButton("È¡Ïû");
+		reg_cancel_btn = new JButton("å–æ¶ˆ");
 		reg_cancel_btn.setBackground(Color.gray);
 		reg_cancel_btn.setBounds(128, 649, 352, 35);
 		AddRegisterComponentListener();
@@ -161,7 +161,7 @@ public class LoginFrame extends JFrame{
 		c.add(register);
 	}
 	
-	private void AddLoginComponentListener() {//¸øµÇÂ½½çÃæ¸÷×é¼şÌí¼Ó¼àÌı
+	private void AddLoginComponentListener() {//ç»™ç™»é™†ç•Œé¢å„ç»„ä»¶æ·»åŠ ç›‘å¬
 		
 		login_btn.addActionListener(new ActionListener() {
 			
@@ -170,22 +170,20 @@ public class LoginFrame extends JFrame{
 				String login_account = account.getText();
 				String login_password = new String(password.getPassword());
 				if(login_account.equals("") || login_password.equals("")) {
-					JOptionPane.showMessageDialog(LoginFrame.this, "ÇëÌîÉÏËùÓĞµÄ¿Õ£¡");//µ¯³öĞ¡¶Ô»°¿ò
+					JOptionPane.showMessageDialog(LoginFrame.this, "è¯·å¡«ä¸Šæ‰€æœ‰çš„ç©ºï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
 					return;
 				}
 				LoginState state = DBmanager.CheckLogin(login_account, login_password);
 				if(LoginState.SUCCESS_LOGIN.equals(state)){
-				//ÅĞ¶¨ÊÇ·ñÎª¹ÜÀíÔ±
-					boolean isAdmin = DBmanager.isAdmin(account.getText());
-					String name = DBmanager.getName(login_account);
-					new MainFrame(isAdmin, name);
+					Reader reader = DBmanager.getReader(login_account, WayOfGetReader.SEARCH_FOR_ACCOUNT);
+					new MainFrame(reader);	//ä»¥è¯»è€…å¯¹è±¡æ‰“å¼€ä¸»èœå•
 					dispose();
 			}else if(LoginState.ERROR_PASSWORD.equals(state)) {
-				JOptionPane.showMessageDialog(LoginFrame.this, "ÃÜÂë´íÎó£¡");//µ¯³öĞ¡¶Ô»°¿ò
-			}else if(LoginState.UNEXIT_ACCOUNT.equals(state)) {
-				JOptionPane.showMessageDialog(LoginFrame.this, "ÕËºÅ²»´æÔÚ£¡");//µ¯³öĞ¡¶Ô»°¿ò
+				JOptionPane.showMessageDialog(LoginFrame.this, "å¯†ç é”™è¯¯ï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
+			}else if(LoginState.UNEXIST_ACCOUNT.equals(state)) {
+				JOptionPane.showMessageDialog(LoginFrame.this, "è´¦å·ä¸å­˜åœ¨ï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
 			}else if(LoginState.UNKNOWN_EXCEPTION.equals(state)) {
-				JOptionPane.showMessageDialog(LoginFrame.this, "Î´Öª´íÎó£¬ÇëÁªÏµ¹ÜÀíÔ±£¡");//µ¯³öĞ¡¶Ô»°¿ò
+				JOptionPane.showMessageDialog(LoginFrame.this, "æœªçŸ¥é”™è¯¯ï¼Œè¯·è”ç³»ç®¡ç†å‘˜ï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
 			}
 		}
 			});
@@ -206,13 +204,13 @@ public class LoginFrame extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				JOptionPane.showMessageDialog(LoginFrame.this, "ÇëÁªÏµ¹ÜÀíÔ±ĞŞ¸ÄÃÜÂë£¡");//µ¯³öĞ¡¶Ô»°¿ò
+				JOptionPane.showMessageDialog(LoginFrame.this, "è¯·è”ç³»ç®¡ç†å‘˜ä¿®æ”¹å¯†ç ï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
 			}
 		});
 		
 	}
 	
-	private void AddRegisterComponentListener() {//¸ø×¢²á½çÃæ¸÷×é¼şÌí¼Ó¼àÌı
+	private void AddRegisterComponentListener() {//ç»™æ³¨å†Œç•Œé¢å„ç»„ä»¶æ·»åŠ ç›‘å¬
 		
 		reg_ensure_btn.addActionListener(new ActionListener() {
 			
@@ -220,23 +218,23 @@ public class LoginFrame extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				if(reg_password.getText().equals("") || reg_account.getText().equals("")){
-					JOptionPane.showMessageDialog(LoginFrame.this, "Äú±ØĞëÌîÉÏËùÓĞµÄ¿Õ£¡");//µ¯³öĞ¡¶Ô»°¿ò
+					JOptionPane.showMessageDialog(LoginFrame.this, "æ‚¨å¿…é¡»å¡«ä¸Šæ‰€æœ‰çš„ç©ºï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
 					return;
 				}else if(!reg_password.getText().equals(reg_password2.getText())) {
-					JOptionPane.showMessageDialog(LoginFrame.this, "Á½´ÎÊäÈëµÄÃÜÂë²»Ò»ÖÂ£¡");//µ¯³öĞ¡¶Ô»°¿ò
+					JOptionPane.showMessageDialog(LoginFrame.this, "ä¸¤æ¬¡è¾“å…¥çš„å¯†ç ä¸ä¸€è‡´ï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
 					return;
 				}
 				String register_account = reg_account.getText();
 				String register_password = new String(reg_password.getPassword());
 				RegisterState state = DBmanager.RegAccount(register_account, register_password);
 				if(RegisterState.ACCOUNT_SUCCESS_REGISTER.equals(state)) {
-					JOptionPane.showMessageDialog(LoginFrame.this, "ÕËºÅ×¢²á³É¹¦£¡");//µ¯³öĞ¡¶Ô»°¿ò
+					JOptionPane.showMessageDialog(LoginFrame.this, "è´¦å·æ³¨å†ŒæˆåŠŸï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
 					register.setVisible(false);
 					login.setVisible(true);
-				}else if(RegisterState.ACCOUNT_EXITS.equals(state)){
-					JOptionPane.showMessageDialog(LoginFrame.this, "ÕËºÅÒÑ¾­´æÔÚ£¡");//µ¯³öĞ¡¶Ô»°¿ò
+				}else if(RegisterState.ACCOUNT_EXIST.equals(state)){
+					JOptionPane.showMessageDialog(LoginFrame.this, "è´¦å·å·²ç»å­˜åœ¨ï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
 				}else {
-					JOptionPane.showMessageDialog(LoginFrame.this, "Î´Öª´íÎó£¬ÇëÁªÏµ¹ÜÀíÔ±£¡");//µ¯³öĞ¡¶Ô»°¿ò
+					JOptionPane.showMessageDialog(LoginFrame.this, "æœªçŸ¥é”™è¯¯ï¼Œè¯·è”ç³»ç®¡ç†å‘˜ï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
 				}
 			}
 		});
