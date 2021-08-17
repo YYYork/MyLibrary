@@ -20,7 +20,7 @@ import mySQLManager.BookFinderType;
 import myUtils.BookToArrays;
 
 public class BookSearchPanel extends JPanel{
-	//²éÑ¯²Ëµ¥Ãæ°å
+	//æŸ¥è¯¢èœå•é¢æ¿
 	private JScrollPane bookCheckPanelTable;
 	private JLabel label_Search_Name;
 	private JLabel label_Search_Publisher;
@@ -33,37 +33,37 @@ public class BookSearchPanel extends JPanel{
 	private JTextField field_Search_Publisher;
 	private JTextField field_Search_Type;
 	private JTable search_Result_Table;
-	private String colNames[] = {"ID","ÊéÃû","ÖÖÀà","³ö°æÉç","ÊÇ·ñ½è³ö"};
-	private String Books[][] = {{"Ä¬ÈÏ","Ä¬ÈÏ","Ä¬ÈÏ","Ä¬ÈÏ","Ä¬ÈÏ"},{"Ä¬ÈÏ","Ä¬ÈÏ","Ä¬ÈÏ","Ä¬ÈÏ","Ä¬ÈÏ"}};
+	private String colNames[] = {"ID","ä¹¦å","ç§ç±»","å‡ºç‰ˆç¤¾","æ˜¯å¦å€Ÿå‡º"};
+	private String Books[][] = {{"é»˜è®¤","é»˜è®¤","é»˜è®¤","é»˜è®¤","é»˜è®¤"},{"é»˜è®¤","é»˜è®¤","é»˜è®¤","é»˜è®¤","é»˜è®¤"}};
 	
 	public BookSearchPanel() {
 			setBounds(0,0,1600,800);
 			setLayout(null);
 			
-			label_Search_Name = new JLabel("ÊéÃû");
-			label_Search_Name.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 20));
+			label_Search_Name = new JLabel("ä¹¦å");
+			label_Search_Name.setFont(new Font("å¾®è½¯é›…é»‘", Font.BOLD, 20));
 			label_Search_Name.setBounds(187, 95, 74, 42);
 			
-			label_Search_Publisher = new JLabel("³ö°æÉç");
-			label_Search_Publisher.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 20));
+			label_Search_Publisher = new JLabel("å‡ºç‰ˆç¤¾");
+			label_Search_Publisher.setFont(new Font("å¾®è½¯é›…é»‘", Font.BOLD, 20));
 			label_Search_Publisher.setBounds(177, 506, 119, 42);
 			
-			label_Search_Type = new JLabel("ÖÖÀà");
-			label_Search_Type.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 20));
+			label_Search_Type = new JLabel("ç§ç±»");
+			label_Search_Type.setFont(new Font("å¾®è½¯é›…é»‘", Font.BOLD, 20));
 			label_Search_Type.setBounds(187, 302, 75, 42);
 			
-			label_Search_Result = new JLabel("Êé¼®½á¹û²éÑ¯");
-			label_Search_Result.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 30));
+			label_Search_Result = new JLabel("ä¹¦ç±ç»“æœæŸ¥è¯¢");
+			label_Search_Result.setFont(new Font("å¾®è½¯é›…é»‘", Font.BOLD, 30));
 			label_Search_Result.setBounds(862, 28, 300, 200);
 			label_Search_Result.setBackground(Color.GRAY);
 			
-			btn_Search_Name = new JButton("ËÑË÷ÊéÃû");
+			btn_Search_Name = new JButton("æœç´¢ä¹¦å");
 			btn_Search_Name.setBounds(145, 218, 116, 59);
 			
-			btn_Search_Publisher = new JButton("ËÑË÷³ö°æÉç");
+			btn_Search_Publisher = new JButton("æœç´¢å‡ºç‰ˆç¤¾");
 			btn_Search_Publisher.setBounds(145, 631, 116, 59);
 			
-			btn_Search_Type = new JButton("ËÑË÷ÖÖÀà");
+			btn_Search_Type = new JButton("æœç´¢ç§ç±»");
 			btn_Search_Type.setBounds(145, 423, 116, 59);
 			
 			field_Search_Name = new JTextField();
@@ -96,7 +96,7 @@ public class BookSearchPanel extends JPanel{
 			setVisible(false);
 	}
 	
-	private void addListener() {//¸ø°´Å¥Ìí¼Ó¼àÌı
+	private void addListener() {//ç»™æŒ‰é’®æ·»åŠ ç›‘å¬
 		btn_Search_Name.addActionListener(new ActionListener() {
 			
 			@Override
@@ -105,28 +105,11 @@ public class BookSearchPanel extends JPanel{
 				String bookName = field_Search_Name.getText();
 				if(bookName.equals(""))
 					return;
-				Book getbooks[] = BookFinder.getBooks(BookFinderType.SEARCH_FOR_NAME, bookName);//ÉèÖÃ±í¸ñÄ£ĞÍ
-				if(!getbooks.equals(null)) {
-				Books = BookToArrays.booktoArrays(getbooks);
+				Book getbooks[] = BookFinder.getBooks(BookFinderType.SEARCH_FOR_NAME, bookName);
+				if(getbooks != null) {
+				Books = BookToArrays.booktoArrays(getbooks);//è®¾ç½®è¡¨æ ¼æ¨¡å‹
 				}else {
-					JOptionPane.showMessageDialog(LoginFrame.instance, "Ã»ÓĞ²éÑ¯µ½ÄúÏëÒªµÄÊé£¡");//µ¯³öĞ¡¶Ô»°¿ò
-				}
-			}
-		});
-		
-		btn_Search_Publisher.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				String bookType = field_Search_Type.getText();
-				if(bookType.equals(""))
-					return;
-				Book getbooks[] = BookFinder.getBooks(BookFinderType.SEARCH_FOR_TYPE, bookType);
-				if(!getbooks.equals(null)) {
-				Books = BookToArrays.booktoArrays(getbooks);
-				}else {
-					JOptionPane.showMessageDialog(LoginFrame.instance, "Ã»ÓĞ²éÑ¯µ½ÄúÏëÒªµÄÖÖÀà£¡");//µ¯³öĞ¡¶Ô»°¿ò
+					JOptionPane.showMessageDialog(MainFrame.instance, "æ²¡æœ‰æŸ¥è¯¢åˆ°æ‚¨æƒ³è¦çš„ä¹¦ï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
 				}
 			}
 		});
@@ -136,14 +119,31 @@ public class BookSearchPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				String bookPublisher = field_Search_Type.getText();
+				String bookType = field_Search_Type.getText();
+				if(bookType.equals(""))
+					return;
+				Book getbooks[] = BookFinder.getBooks(BookFinderType.SEARCH_FOR_TYPE, bookType);
+				if(getbooks != null) {
+				Books = BookToArrays.booktoArrays(getbooks);
+				}else {
+					JOptionPane.showMessageDialog(MainFrame.instance, "æ²¡æœ‰æŸ¥è¯¢åˆ°æ‚¨æƒ³è¦çš„ç§ç±»ï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
+				}
+			}
+		});
+		
+		btn_Search_Publisher.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String bookPublisher = field_Search_Publisher.getText();
 				if(bookPublisher.equals(""))
 					return;
 				Book getbooks[] = BookFinder.getBooks(BookFinderType.SEARCH_FOR_PUBLISHER, bookPublisher);
-				if(!getbooks.equals(null)) {
+				if(getbooks != null) {
 				Books = BookToArrays.booktoArrays(getbooks);
 				}else {
-					JOptionPane.showMessageDialog(LoginFrame.instance, "Ã»ÓĞ²éÑ¯µ½ÄúÏëÒªµÄ³ö°æÉç£¡");//µ¯³öĞ¡¶Ô»°¿ò
+					JOptionPane.showMessageDialog(MainFrame.instance, "æ²¡æœ‰æŸ¥è¯¢åˆ°æ‚¨æƒ³è¦çš„å‡ºç‰ˆç¤¾ï¼");//å¼¹å‡ºå°å¯¹è¯æ¡†
 				}
 			}
 		});
