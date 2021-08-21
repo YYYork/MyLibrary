@@ -26,13 +26,13 @@ public class BookReturnPanel extends JPanel {
 	private JSplitPane splitPane;
 	private JButton btn_Return;
 	private List<Book> books;
-	private String colNames[] = { "ID", "ä¹¦å", "å€Ÿä¹¦è€…" };
-	private String Books[][] = {{"æ— ","æ— ","æ— "}};
+	private String colNames[] = { "ID", "ÊéÃû", "½èÊéÕß" };
+	private String Books[][] = {{"ÎŞ","ÎŞ","ÎŞ"}};
 
 	public BookReturnPanel() {
 		setBounds(0, 0, 1600, 800);
 		
-		btn_Return = new JButton("å½’è¿˜ä¹¦ç±");
+		btn_Return = new JButton("¹é»¹Êé¼®");
 
 		books = DBmanager.getBooksReaderBorrowed(MainFrame.instance.getReader());
 		if (!books.isEmpty()) {
@@ -88,7 +88,7 @@ public class BookReturnPanel extends JPanel {
 				Book book = books.get(index);
 				BookAdder.setBookBorrowState(book, false);
 				BookAdder.delBookBorrowRecord(MainFrame.instance.getReader(), book);
-				JOptionPane.showMessageDialog(MainFrame.instance, "å½’è¿˜æˆåŠŸï¼");// å¼¹å‡ºå°å¯¹è¯æ¡†
+				JOptionPane.showMessageDialog(MainFrame.instance, "¹é»¹³É¹¦£¡");// µ¯³öĞ¡¶Ô»°¿ò
 			}
 		});
 	}

@@ -31,13 +31,13 @@ public class MainFrame extends JFrame{
 	private JButton btn_BookCheck;
 	private JButton btn_BookReturn;
 	private JTextArea area_Announce;
-	//ç®¡ç†å‘˜èœå•
+	//¹ÜÀíÔ±²Ëµ¥
 	private JMenuBar bar;
 	private JMenuItem basic_Data_Maintain_Menu;
 	private JMenuItem book_Borrow_Manager_Menu;
 	private JMenuItem newbook_Order_Manager_Menu;
 	private JMenuItem systrem_Maintain_Manager_Menu;
-	//é¢æ¿
+	//Ãæ°å
 	private BookSearchPanel searchPanel;
 	private BookBorrowPanel borrowPanel;
 	private BookReturnPanel returnPanel;
@@ -47,10 +47,10 @@ public class MainFrame extends JFrame{
 		this.reader = reader;
 		defaultSetting();
 		if(reader.isAdmin()) {
-			setTitle("æ¬¢è¿æ‚¨,ç®¡ç†å‘˜ï¼š" + reader.getName());
+			setTitle("»¶Ó­Äú,¹ÜÀíÔ±£º" + reader.getName());
 			adminSetting();
 		}else {
-			setTitle("æ¬¢è¿æ‚¨,ç”¨æˆ·ï¼š" + reader.getName());
+			setTitle("»¶Ó­Äú,ÓÃ»§£º" + reader.getName());
 			guestSetting();
 		}
 	}
@@ -59,10 +59,10 @@ public class MainFrame extends JFrame{
 		return reader;
 	}
 
-	private void guestSetting() {//åˆå§‹åŒ–ç”¨æˆ·çš„MenuBar
+	private void guestSetting() {//³õÊ¼»¯ÓÃ»§µÄMenuBar
 		bar = new JMenuBar();
 		
-		book_Borrow_Manager_Menu = new JMenuItem("å›¾ä¹¦å€Ÿé˜…ç®¡ç†");
+		book_Borrow_Manager_Menu = new JMenuItem("Í¼Êé½èÔÄ¹ÜÀí");
 		book_Borrow_Manager_Menu.addActionListener(new ActionListener() {
 			
 			@Override
@@ -95,7 +95,7 @@ public class MainFrame extends JFrame{
 		
 	}
 	
-	private void defaultSetting() {//åˆå§‹åŒ–ä¸»èœå•å„ç»„ä»¶
+	private void defaultSetting() {//³õÊ¼»¯Ö÷²Ëµ¥¸÷×é¼ş
 		
 		searchPanel = new BookSearchPanel();
 		borrowPanel = new BookBorrowPanel();
@@ -117,23 +117,23 @@ public class MainFrame extends JFrame{
 		label_Img.setBorder(BorderFactory.createLineBorder(Color.black));
 		label_Img.setBounds(59,164,431,460);
 		
-		btn_BookBorrow = new JButton("å›¾ä¹¦å€Ÿé˜…");
+		btn_BookBorrow = new JButton("Í¼Êé½èÔÄ");
 		btn_BookBorrow.setBackground(Color.gray);
 		btn_BookBorrow.setBounds(620,131,359,105);
 		
-		btn_BookCheck = new JButton("å›¾ä¹¦æŸ¥è¯¢");
+		btn_BookCheck = new JButton("Í¼Êé²éÑ¯");
 		btn_BookCheck.setBackground(Color.gray);
 		btn_BookCheck.setBounds(620,358,359,105);
 		
-		btn_BookReturn = new JButton("å›¾ä¹¦å½’è¿˜");
+		btn_BookReturn = new JButton("Í¼Êé¹é»¹");
 		btn_BookReturn.setBackground(Color.gray);
 		btn_BookReturn.setBounds(620,560,359,105);
 		
 		area_Announce = new JTextArea();
 		area_Announce.setEditable(false);
 		area_Announce.setBorder(BorderFactory.createLineBorder(Color.black));
-		area_Announce.setText("                          å…¬å‘Š");
-		area_Announce.setFont(new Font("å¾®è½¯é›…é»‘",Font.BOLD,25));
+		area_Announce.setText("                          ¹«¸æ");
+		area_Announce.setFont(new Font("Î¢ÈíÑÅºÚ",Font.BOLD,25));
 		area_Announce.setBounds(1126, 61, 419, 658);
 		
 		btnActionListenerAdder();
@@ -151,7 +151,7 @@ public class MainFrame extends JFrame{
 		setVisible(true);
 	} 
 	
-	private void btnActionListenerAdder() {//ç»™æŒ‰é’®æ·»åŠ ç›‘å¬
+	private void btnActionListenerAdder() {//¸ø°´Å¥Ìí¼Ó¼àÌı
 		
 		btn_BookBorrow.addActionListener(new ActionListener() {
 			
@@ -186,11 +186,11 @@ public class MainFrame extends JFrame{
 		
 	}
 	
-	private void adminSetting() {//åˆå§‹åŒ–ç®¡ç†å‘˜çš„MenuBar
+	private void adminSetting() {//³õÊ¼»¯¹ÜÀíÔ±µÄMenuBar
 		
 		bar = new JMenuBar();
 		
-		book_Borrow_Manager_Menu = new JMenuItem("å›¾ä¹¦å€Ÿé˜…ç®¡ç†");
+		book_Borrow_Manager_Menu = new JMenuItem("Í¼Êé½èÔÄ¹ÜÀí");
 		book_Borrow_Manager_Menu.addActionListener(new ActionListener() {
 			
 			@Override
@@ -217,7 +217,7 @@ public class MainFrame extends JFrame{
 			}
 		});
 		
-		basic_Data_Maintain_Menu = new JMenuItem("åŸºç¡€æ•°æ®ç»´æŠ¤");
+		basic_Data_Maintain_Menu = new JMenuItem("»ù´¡Êı¾İÎ¬»¤");
 		basic_Data_Maintain_Menu.addActionListener(new ActionListener() {
 			
 			@Override
@@ -227,7 +227,7 @@ public class MainFrame extends JFrame{
 			}
 		});
 		
-		newbook_Order_Manager_Menu = new JMenuItem("æ–°ä¹¦è®¢è´­ç®¡ç†");
+		newbook_Order_Manager_Menu = new JMenuItem("ĞÂÊé¶©¹º¹ÜÀí");
 		newbook_Order_Manager_Menu.addActionListener(new ActionListener() {
 			
 			@Override
@@ -237,7 +237,7 @@ public class MainFrame extends JFrame{
 			}
 		});
 		
-		systrem_Maintain_Manager_Menu = new JMenuItem("ç³»ç»Ÿç»´æŠ¤ç®¡ç†");
+		systrem_Maintain_Manager_Menu = new JMenuItem("ÏµÍ³Î¬»¤¹ÜÀí");
 		systrem_Maintain_Manager_Menu.addActionListener(new ActionListener() {
 			
 			@Override
