@@ -9,6 +9,15 @@ import myObject.Reader;
 import myUtils.UseSQL;
 
 public class BookAdder {
+	
+	/*
+	 * addBook() 添加书
+	 * setBook() 更新书
+	 * removeBook() 删除书
+	 * addBookBorrowRecord() 添加书被借的记录
+	 * delBookBorrowRecord() 删除书被借的记录
+	 */
+	
 	public static boolean addBook(Book book) {
 		Connection con = DBmanager.getConnection();
 		PreparedStatement ps = null;
@@ -79,6 +88,14 @@ public class BookAdder {
 		}
 	}
 	
+	public static void removeBook(Book book) {
+		
+	}
+	
+	public static void setBook(Book book) {
+		
+	}
+	
 	public static void addBookBorrowRecord(Reader reader,Book book) {
 		UseSQL.useSQLToExecute("INSERT INTO BookBorrowRecord (BookID,BorrowAccount) VALUES (?,?)",book.getId(),reader.getAccount());
 	}
@@ -86,4 +103,5 @@ public class BookAdder {
 	public static void delBookBorrowRecord(Reader reader,Book book) {
 		UseSQL.useSQLToExecute("DELETE FROM BookBorrowRecord WHERE BookID = ?",book.getId());
 	}
+	
 }
