@@ -37,7 +37,7 @@ public class Book {
 		return id;
 	}
 	
-	public boolean getisBorrowed() {
+	public boolean isBorrowed() {
 		return isBorrowed;
 	}
 }

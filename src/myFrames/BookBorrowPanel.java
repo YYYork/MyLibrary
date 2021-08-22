@@ -1,9 +1,9 @@
 package myFrames;
 
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -30,8 +30,8 @@ public class BookBorrowPanel extends JPanel{
 	private JTable table;
 	private JSplitPane splitPane;
 	private String colNames[] = {"ID","书名","种类","出版社","是否借出"};
-	private String Books[][] = {{"默认","默认","默认","默认","默认"}};
-	private Book getbooks[];
+	private String Books[][] = {{"请搜索","请搜索","请搜索","请搜索","请搜索"}};
+	private List<Book> getbooks;
 	
 	public BookBorrowPanel() {
 		setBounds(0,0,1600,800);
@@ -82,7 +82,7 @@ public class BookBorrowPanel extends JPanel{
 				if(id.equals(""))
 					return;
 				getbooks = BookFinder.getBooks(BookFinderType.SEARCH_FOR_ID, id);
-				if(getbooks == null) {
+				if(getbooks.isEmpty()) {
 					JOptionPane.showMessageDialog(MainFrame.instance, "查无此书！");//弹出小对话框
 					return;
 				}
@@ -100,8 +100,8 @@ public class BookBorrowPanel extends JPanel{
 				if(index == -1) {
 					return;
 				}
-				Book book = getbooks[index];
-				if(!book.getisBorrowed()) {
+				Book book = getbooks.get(index);
+				if(!book.isBorrowed()) {
 				BookAdder.setBookBorrowState(book, true);
 				BookAdder.addBookBorrowRecord(MainFrame.instance.getReader(),book);
 				}else {

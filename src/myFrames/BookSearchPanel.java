@@ -1,10 +1,10 @@
 package myFrames;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -105,28 +105,11 @@ public class BookSearchPanel extends JPanel{
 				String bookName = field_Search_Name.getText();
 				if(bookName.equals(""))
 					return;
-				Book getbooks[] = BookFinder.getBooks(BookFinderType.SEARCH_FOR_NAME, bookName);
-				if(getbooks != null) {
+				List<Book> getbooks = BookFinder.getBooks(BookFinderType.SEARCH_FOR_NAME, bookName);
+				if(!getbooks.isEmpty()) {
 				Books = BookToArrays.booktoArrays(getbooks);//设置表格模型
 				}else {
 					JOptionPane.showMessageDialog(MainFrame.instance, "没有查询到您想要的书！");//弹出小对话框
-				}
-			}
-		});
-		
-		btn_Search_Type.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				String bookType = field_Search_Type.getText();
-				if(bookType.equals(""))
-					return;
-				Book getbooks[] = BookFinder.getBooks(BookFinderType.SEARCH_FOR_TYPE, bookType);
-				if(getbooks != null) {
-				Books = BookToArrays.booktoArrays(getbooks);
-				}else {
-					JOptionPane.showMessageDialog(MainFrame.instance, "没有查询到您想要的种类！");//弹出小对话框
 				}
 			}
 		});
@@ -139,11 +122,28 @@ public class BookSearchPanel extends JPanel{
 				String bookPublisher = field_Search_Publisher.getText();
 				if(bookPublisher.equals(""))
 					return;
-				Book getbooks[] = BookFinder.getBooks(BookFinderType.SEARCH_FOR_PUBLISHER, bookPublisher);
-				if(getbooks != null) {
+				List<Book> getbooks = BookFinder.getBooks(BookFinderType.SEARCH_FOR_PUBLISHER, bookPublisher);
+				if(!getbooks.isEmpty()) {
 				Books = BookToArrays.booktoArrays(getbooks);
 				}else {
 					JOptionPane.showMessageDialog(MainFrame.instance, "没有查询到您想要的出版社！");//弹出小对话框
+				}
+			}
+		});
+		
+		btn_Search_Type.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String bookType = field_Search_Type.getText();
+				if(bookType.equals(""))
+					return;
+				List<Book> getbooks = BookFinder.getBooks(BookFinderType.SEARCH_FOR_TYPE, bookType);
+				if(!getbooks.isEmpty()) {
+				Books = BookToArrays.booktoArrays(getbooks);
+				}else {
+					JOptionPane.showMessageDialog(MainFrame.instance, "没有查询到您想要的种类！");//弹出小对话框
 				}
 			}
 		});

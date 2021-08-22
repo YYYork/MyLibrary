@@ -25,6 +25,11 @@ public class UpdateReader extends JPanel{
 	private JTextField field_addReaderPanel_name;
 	private JTextField field_addReaderPanel_isAdmin;
 	private JButton btn_addReaderPanel_add;
+	
+	private JPanel panel;
+	private JButton btn_updateReaderPanel;
+	private JButton btn_removeReaderPanel;
+	private JButton btn_addReaderPanel;
 /*
  * 按钮1	显示面板1
  * 按钮2	显示面板2

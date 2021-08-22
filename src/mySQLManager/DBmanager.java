@@ -12,7 +12,6 @@ import myObject.Book;
 import myObject.Reader;
 
 public class DBmanager {
-	
 	/*
 	 * getConnection()	得到和数据库连接
 	 * CheckLogin()	检验账号密码
@@ -20,11 +19,11 @@ public class DBmanager {
 	 * getReader() 通过 账号/名字 查询并返回
 	 * setReader() 更新用户信息
 	 * addReader() 添加新用户
-	 * getBooksReaderBorrowed() 返回用户借的书
+	 * getBooksReaderBorrowed() 返回用户借的书(List)
 	 */
+	private static Connection con = null;
 	
-	public static Connection getConnection() {// 得到和数据库的连接
-		Connection con;
+	static {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -33,12 +32,14 @@ public class DBmanager {
 		}
 		try {
 			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/myLibrary", "root", "Dyk20050119.");
-			return con;
 		} catch (SQLException e) {
 			System.out.println("数据库连接失败");
 			e.printStackTrace();
 		}
-		return null;
+	}
+
+	public static Connection getConnection() {// 得到和数据库的连接
+		return con;
 	}
 
 	public static LoginState CheckLogin(String account, String password) {// 验证登陆
@@ -65,14 +66,6 @@ public class DBmanager {
 			if (ps != null) {
 				try {
 					ps.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -120,14 +113,6 @@ public class DBmanager {
 					e.printStackTrace();
 				}
 			}
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
 		}
 		return RegisterState.UNKNOWN_EXCEPTION; // 未知错误
 	}
@@ -160,47 +145,31 @@ public class DBmanager {
 						e.printStackTrace();
 					}
 				}
-				if (con != null) {
-					try {
-						con.close();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
 			}
-		}
-		if (way.equals(WayOfGetReader.SEARCH_FOR_NAME)) {
-			try {
-				ps = con.prepareStatement("select * from Accounts where Name = ?");
-				ps.setString(1, account);
-				ResultSet res = ps.executeQuery();
-				if (!res.next()) {
-					return null;
-				}
-				String getAccount = res.getString("Account");
-				String getName = res.getString("Name");
-				boolean isAdmin = res.getBoolean("isAdmin");
-				Reader reader = new Reader(getAccount, getName, isAdmin);
-				return reader;
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				if (ps != null) {
-					try {
-						ps.close();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+			if (way.equals(WayOfGetReader.SEARCH_FOR_NAME)) {
+				try {
+					ps = con.prepareStatement("select * from Accounts where Name = ?");
+					ps.setString(1, account);
+					ResultSet res = ps.executeQuery();
+					if (!res.next()) {
+						return null;
 					}
-				}
-				if (con != null) {
-					try {
-						con.close();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					String getAccount = res.getString("Account");
+					String getName = res.getString("Name");
+					boolean isAdmin = res.getBoolean("isAdmin");
+					Reader reader = new Reader(getAccount, getName, isAdmin);
+					return reader;
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} finally {
+					if (ps != null) {
+						try {
+							ps.close();
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -234,14 +203,6 @@ public class DBmanager {
 						e.printStackTrace();
 					}
 				}
-				if (con != null) {
-					try {
-						con.close();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
 			}
 		}
 	}
@@ -270,22 +231,13 @@ public class DBmanager {
 					e.printStackTrace();
 				}
 			}
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 
-	
 	public static void removeReader(Reader reader) {
-		
+
 	}
-	
+
 	public static List<Book> getBooksReaderBorrowed(Reader reader) {
 		List<Book> books = new ArrayList<>();
 		Connection con = getConnection();
@@ -296,10 +248,7 @@ public class DBmanager {
 			ResultSet res = ps.executeQuery();
 			while (res.next()) {// 把书放入List中
 				String bookID = res.getString("BookID");
-				Book getBooks[] = BookFinder.getBooks(BookFinderType.SEARCH_FOR_ID, bookID);
-				for (Book book : getBooks) {
-					books.add(book);
-				}
+				books = BookFinder.getBooks(BookFinderType.SEARCH_FOR_ID, bookID);
 			}
 			return books;
 		} catch (SQLException e) {

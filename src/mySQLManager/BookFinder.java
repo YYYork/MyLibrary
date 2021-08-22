@@ -4,16 +4,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import myObject.Book;
 
 public class BookFinder {
-	public static Book[] getBooks(BookFinderType type,String str) {
+	public static List<Book> getBooks(BookFinderType type,String str) {
 		Connection con = DBmanager.getConnection();
 		PreparedStatement ps = null;
 		ResultSet res = null;
-		Book books[] = null;
-		int account = 0;
+		List<Book> books = new ArrayList<>();
 		try {
 			if(type.equals(BookFinderType.SEARCH_FOR_NAME)) {
 			ps = con.prepareStatement("select * from Books where BookName = ?");
@@ -25,8 +26,7 @@ public class BookFinder {
 					String Publisher = res.getString("Publisher");
 					String bookid = res.getString("BookID");
 					boolean isBorrowed = res.getBoolean("isBorrowed");
-					books[account] = new Book(bookName,bookType,Publisher,bookid,isBorrowed);
-					account++;
+					books.add(new Book(bookName,bookType,Publisher,bookid,isBorrowed));
 				}
 				return books;
 			}
@@ -40,8 +40,7 @@ public class BookFinder {
 					String Publisher = res.getString("Publisher");
 					String bookid = res.getString("BookID");
 					boolean isBorrowed = res.getBoolean("isBorrowed");
-					books[account] = new Book(bookName,bookType,Publisher,bookid,isBorrowed);
-					account++;
+					books.add(new Book(bookName,bookType,Publisher,bookid,isBorrowed));
 				}
 				return books;
 			}
@@ -55,8 +54,7 @@ public class BookFinder {
 					String Publisher = res.getString("Publisher");
 					String bookid = res.getString("BookID ");
 					boolean isBorrowed = res.getBoolean("isBorrowed");
-					books[account] = new Book(bookName,bookType,Publisher,bookid,isBorrowed);
-					account++;
+					books.add(new Book(bookName,bookType,Publisher,bookid,isBorrowed));
 				}
 				return books;
 			}
@@ -71,8 +69,7 @@ public class BookFinder {
 					String Publisher = res.getString("Publisher");
 					String bookid = res.getString("BookID ");
 					boolean isBorrowed = res.getBoolean("isBorrowed");
-					books[account] = new Book(bookName,bookType,Publisher,bookid,isBorrowed);
-					account++;
+					books.add(new Book(bookName,bookType,Publisher,bookid,isBorrowed));
 				}
 				return books;
 			}
@@ -89,17 +86,7 @@ public class BookFinder {
 					e.printStackTrace();
 				}
 			}
-			if(con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
 		}
-		
-		return null;//没有查询到书
-		
+		return books;//没有查询到书
 	}
 }

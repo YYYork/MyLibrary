@@ -42,14 +42,6 @@ public class BookAdder {
 					e.printStackTrace();
 				}
 			}
-			if(con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
 		}
 		return false;//≤Â»Î ß∞‹
 	}
@@ -72,14 +64,6 @@ public class BookAdder {
 			if(ps != null) {
 				try {
 					ps.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			if(con != null) {
-				try {
-					con.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

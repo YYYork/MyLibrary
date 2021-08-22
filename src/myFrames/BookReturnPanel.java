@@ -1,6 +1,5 @@
 package myFrames;
 
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,18 +35,7 @@ public class BookReturnPanel extends JPanel {
 
 		books = DBmanager.getBooksReaderBorrowed(MainFrame.instance.getReader());
 		if (!books.isEmpty()) {
-			int row = 0;
-			for (Book book : books) {
-				for (int col = 0; col < 3; col++) {
-					if (col == 1)
-						Books[row][col] = book.getId();
-					if (col == 2)
-						Books[row][col] = book.getBookName();
-					if (col == 3)
-						Books[row][col] = MainFrame.instance.getName();
-				}
-				row++;
-			}
+			Books = BookToArrays.booktoArrays(books);
 		}else {
 			btn_Return.setEnabled(false);
 		}

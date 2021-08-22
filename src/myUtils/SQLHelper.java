@@ -44,9 +44,6 @@ public class SQLHelper {
 		if(ps!=null) {
 				ps.close();
 		}
-		if(con!=null) {
-				con.close();
-	}
 }
 	
 	private void setObject(int index,Object object) throws SQLException {

@@ -50,9 +50,9 @@ public class LoginFrame extends JFrame{
 	
 	private void LoginFramePreSetting() {//登陆界面初始化
 		setBounds(600, 150, 550, 800);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("鸭梨图书馆——登陆界面");
 		setResizable(false);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		c = getContentPane();
 		c.setLayout(null);
 		
