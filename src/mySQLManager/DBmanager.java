@@ -12,6 +12,7 @@ import myObject.Book;
 import myObject.Reader;
 
 public class DBmanager {
+	
 	/*
 	 * getConnection()	得到和数据库连接
 	 * CheckLogin()	检验账号密码
@@ -21,9 +22,10 @@ public class DBmanager {
 	 * addReader() 添加新用户
 	 * getBooksReaderBorrowed() 返回用户借的书(List)
 	 */
+	
 	private static Connection con = null;
 	
-	static {
+	static {// 类被加载时得到和数据库的连接
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -38,7 +40,7 @@ public class DBmanager {
 		}
 	}
 
-	public static Connection getConnection() {// 得到和数据库的连接
+	public static Connection getConnection() {
 		return con;
 	}
 

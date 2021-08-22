@@ -19,6 +19,9 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import myFrames.basicDataMatiain.BookDataManagePanel;
+import myFrames.newBookManager.NewBookManagePanel;
+import myFrames.systemManager.UpdateReader;
 import myObject.Reader;
 
 public class MainFrame extends JFrame{
@@ -41,6 +44,9 @@ public class MainFrame extends JFrame{
 	private BookSearchPanel searchPanel;
 	private BookBorrowPanel borrowPanel;
 	private BookReturnPanel returnPanel;
+	private BookDataManagePanel bookDataManagePanel;
+	private NewBookManagePanel newBookManagePanel;
+	private UpdateReader updateReaderPanel;
 	
 	public MainFrame(Reader reader) {
 		instance = this;
@@ -67,26 +73,9 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				if(mainPane.isVisible()) {
-					return;
+				setNowVisibleFalse();
+				mainPane.setVisible(true);
 				}
-				if(returnPanel.isVisible()) {
-					returnPanel.setVisible(false);
-					mainPane.setVisible(true);
-					return;
-				}
-				if(borrowPanel.isVisible()) {
-					borrowPanel.setVisible(false);
-					mainPane.setVisible(true);
-					return;
-				}
-				if(searchPanel.isVisible()) {
-					searchPanel.setVisible(false);
-					mainPane.setVisible(true);
-					return;
-				}
-			}
 		});
 		
 		bar.add(book_Borrow_Manager_Menu);
@@ -188,6 +177,14 @@ public class MainFrame extends JFrame{
 	
 	private void adminSetting() {//初始化管理员的MenuBar
 		
+		updateReaderPanel = new UpdateReader();
+		bookDataManagePanel = new BookDataManagePanel();
+		newBookManagePanel = new NewBookManagePanel();
+		
+		add(updateReaderPanel);
+		add(bookDataManagePanel);
+		add(newBookManagePanel);
+		
 		bar = new JMenuBar();
 		
 		book_Borrow_Manager_Menu = new JMenuItem("图书借阅管理");
@@ -195,25 +192,8 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				if(mainPane.isVisible()) {
-					return;
-				}
-				if(returnPanel.isVisible()) {
-					returnPanel.setVisible(false);
-					mainPane.setVisible(true);
-					return;
-				}
-				if(borrowPanel.isVisible()) {
-					borrowPanel.setVisible(false);
-					mainPane.setVisible(true);
-					return;
-				}
-				if(searchPanel.isVisible()) {
-					searchPanel.setVisible(false);
-					mainPane.setVisible(true);
-					return;
-				}
+				setNowVisibleFalse();
+				mainPane.setVisible(true);
 			}
 		});
 		
@@ -222,8 +202,8 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				setNowVisibleFalse();
+				bookDataManagePanel.setVisible(true);
 			}
 		});
 		
@@ -232,8 +212,8 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				setNowVisibleFalse();
+				newBookManagePanel.setVisible(true);
 			}
 		});
 		
@@ -242,8 +222,8 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				setNowVisibleFalse();
+				updateReaderPanel.setVisible(true);
 			}
 		});
 		
@@ -254,4 +234,19 @@ public class MainFrame extends JFrame{
 		
 		setJMenuBar(bar);
 	}	
+	
+	private void setNowVisibleFalse() {
+		if(mainPane.isVisible()) {mainPane.setVisible(false);}
+		if(searchPanel.isVisible()) {searchPanel.setVisible(false);}
+		if(borrowPanel.isVisible()) {borrowPanel.setVisible(false);}
+		if(returnPanel.isVisible()) {returnPanel.setVisible(false);}
+		
+		if(!reader.isAdmin()) {//防止空指针异常
+			return;
+		}
+		
+		if(bookDataManagePanel.isVisible()) {bookDataManagePanel.setVisible(false);}
+		if(newBookManagePanel.isVisible()) {newBookManagePanel.setVisible(false);}
+		if(updateReaderPanel.isVisible()) {updateReaderPanel.setVisible(false);}
+	}
 }

@@ -10,6 +10,11 @@ import java.util.List;
 import myObject.Book;
 
 public class BookFinder {
+	
+	/*
+	 * getBooks() µ√µΩ È
+	 * */
+	
 	public static List<Book> getBooks(BookFinderType type,String str) {
 		Connection con = DBmanager.getConnection();
 		PreparedStatement ps = null;

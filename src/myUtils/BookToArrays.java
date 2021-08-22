@@ -5,6 +5,11 @@ import java.util.List;
 import myObject.Book;
 
 public class BookToArrays {
+	
+	/*
+	 * 把list转换成String二维数组（JTable的好帮手）
+	 * */
+	
 	public static String[][] booktoArrays(List<Book> books) {
 		if (books.isEmpty()) {
 			String[][] books_str = { { "查无此书", "查无此书", "查无此书", "查无此书", "查无此书" } };

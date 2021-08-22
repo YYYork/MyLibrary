@@ -1,8 +1,12 @@
 package myFrames.basicDataMatiain;
 
+import java.awt.BorderLayout;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -21,11 +25,28 @@ public class BookDataManagePanel extends JPanel{
 	private JButton btn_findBook;
 	private JButton btn_removeBook;//先查书，显示书信息，显示删除按钮
 	
-	private JPanel panel;
-	private JButton btn_bookAddPanel;
-	private JButton btn_bookRemovePanel;
-	/*
-	 * 按钮1	显示面板1
-	 * 按钮2	显示面板2
-	 * */
+	private JTabbedPane tabPane;
+	
+	public BookDataManagePanel() {
+		setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+		setLayout(new BorderLayout());
+		setBounds(0,0,1600,800);
+		
+		tabPane = new JTabbedPane();
+		
+		bookRemovePanel = new JPanel();
+		
+		bookAddPanel = new JPanel();
+		
+		setTabElement();
+		
+		add(tabPane,BorderLayout.CENTER);
+		
+		setVisible(false);
+	}
+	
+	private void setTabElement() {
+		tabPane.addTab("添加书", bookAddPanel);
+		tabPane.addTab("删除书", bookRemovePanel);
+	}
 }

@@ -34,7 +34,7 @@ public class BookSearchPanel extends JPanel{
 	private JTextField field_Search_Type;
 	private JTable search_Result_Table;
 	private String colNames[] = {"ID","书名","种类","出版社","是否借出"};
-	private String Books[][] = {{"默认","默认","默认","默认","默认"},{"默认","默认","默认","默认","默认"}};
+	private String Books[][] = {{"默认","默认","默认","默认","默认"}};
 	
 	public BookSearchPanel() {
 			setBounds(0,0,1600,800);
