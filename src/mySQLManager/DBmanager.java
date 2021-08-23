@@ -10,6 +10,7 @@ import java.util.List;
 
 import myObject.Book;
 import myObject.Reader;
+import myUtils.UseSQL;
 
 public class DBmanager {
 	
@@ -186,8 +187,7 @@ public class DBmanager {
 			return;
 		} else {
 			try {
-				ps = con.prepareStatement(
-						"UPDATE Accounts SET (Account,Password,isAdmin,Name) = (?,?,?,?) WHERE Account = ?");
+				ps = con.prepareStatement("UPDATE Accounts SET (Account,Password,isAdmin,Name) = (?,?,?,?) WHERE Account = ?");
 				ps.setString(1, reader.getAccount());
 				ps.setString(2, reader.getPassword());
 				ps.setBoolean(3, reader.isAdmin());
@@ -237,7 +237,7 @@ public class DBmanager {
 	}
 
 	public static void removeReader(Reader reader) {
-
+		UseSQL.useSQLToExecute("DELETE FROM Accounts WHERE Account = ?",reader.getAccount()); 
 	}
 
 	public static List<Book> getBooksReaderBorrowed(Reader reader) {

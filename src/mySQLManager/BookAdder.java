@@ -73,11 +73,11 @@ public class BookAdder {
 	}
 	
 	public static void removeBook(Book book) {
-		
+		UseSQL.useSQLToExecute("DELETE FROM Books WHERE BookID = ?",book.getId());
 	}
 	
 	public static void setBook(Book book) {
-		
+		UseSQL.useSQLToExecute("INSERT INTO Books (BookID,BookName,BookType,Publisher,isBorrowed) VALUES (?,?,?,?,?)",book.getId(),book.getBookName(),book.getBookType(),book.getPublisher(),book.isBorrowed());
 	}
 	
 	public static void addBookBorrowRecord(Reader reader,Book book) {
