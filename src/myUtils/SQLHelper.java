@@ -19,10 +19,6 @@ public class SQLHelper {
 				i++;
 			}
 	}
-	
-	public SQLHelper(String sqls[],Object objects[][]) {
-		// TODO Auto-generated constructor stub
-	}
 
 	public Connection con() {
 		return con;

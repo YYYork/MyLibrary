@@ -3,15 +3,26 @@ package myFrames.newBookManager;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import myFrames.MainFrame;
+import myFrames.basicDataMatiain.BookDataManagePanel;
+import myObject.Book;
+import mySQLManager.BookAdder;
+import mySQLManager.BookFinder;
+import mySQLManager.BookFinderType;
 
 public class NewBookManagePanel extends JPanel{
 	private JPanel newBookOrderPanel;
@@ -25,6 +36,9 @@ public class NewBookManagePanel extends JPanel{
 	private JPanel checkNewBookPanel;
 	private JPanel checkNewBookPanel_sonRight;
 	private JTable table;
+	private String comName[] = {"书名","出版社"};
+	private String rows[][] = {{"",""}};
+	private DefaultTableModel tableModel;
 	private JScrollPane scroPane;
 	private JTextField field_checkNewBookPanel_bookType;
 	private JLabel label_checkNewBookPanel_bookType;
@@ -46,6 +60,8 @@ public class NewBookManagePanel extends JPanel{
 		
 		checkNewBookPanel = new JPanel();
 		checkNewBookPanel();
+		
+		addListener();
 		
 		tabPane = new JTabbedPane();
 		
@@ -86,7 +102,8 @@ public class NewBookManagePanel extends JPanel{
 		checkNewBookPanel.setLayout(new GridLayout(1,2,30,30));
 		checkNewBookPanel.setBorder(BorderFactory.createEmptyBorder(30,30,30,30));
 		
-		table = new JTable();
+		tableModel = new DefaultTableModel(rows, comName);
+		table = new JTable(tableModel);
 		scroPane = new JScrollPane(table);
 		field_checkNewBookPanel_bookType = new JTextField();
 		label_checkNewBookPanel_bookType = new JLabel("书籍种类：");
@@ -102,5 +119,66 @@ public class NewBookManagePanel extends JPanel{
 		
 		checkNewBookPanel.add(scroPane);
 		checkNewBookPanel.add(checkNewBookPanel_sonRight);
+	}
+	
+	private void addListener() {
+		
+		btn_order.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String bookName = field_newBookOrderPanel_bookName.getText();
+				String publisher = field_newBookOrderPanel_publisher.getText();
+				if(bookName.equals("")||publisher.equals("")) {
+					return;
+				}else {
+					field_newBookOrderPanel_bookName.setText("");
+					field_newBookOrderPanel_publisher.setText("");
+					String book[] = {bookName,publisher};
+					tableModel.addRow(book);
+					JOptionPane.showMessageDialog(MainFrame.instance, "预订成功！");
+				}
+			}
+		});
+		
+		btn_pass.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String bookType = field_checkNewBookPanel_bookType.getText();
+				int rowC = table.getSelectedRow();
+				if(rowC==-1||rowC==0||bookType.equals("")) {
+					return;
+				}else {
+					String bookName = table.getValueAt(rowC, 1).toString();
+					String publisher = table.getValueAt(rowC, 2).toString();
+					if(BookFinder.getBooks(BookFinderType.SEARCH_FOR_NAME, bookName).isEmpty()) {
+						field_checkNewBookPanel_bookType.setText("");
+						tableModel.removeRow(rowC);
+						String book[] = {bookName,bookType,publisher};
+						BookDataManagePanel.tabelModel.addRow(book);
+					}else {
+						JOptionPane.showMessageDialog(MainFrame.instance, "书籍已存在！");
+					}
+				}
+			}
+		});
+		
+		btn_remove.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int rowC = table.getSelectedRow();
+				if(rowC==-1||rowC==0) {
+					return;
+				}else {
+					tableModel.removeRow(rowC);
+					JOptionPane.showMessageDialog(MainFrame.instance, "书籍已删除！");
+				}
+			}
+		});
 	}
 }

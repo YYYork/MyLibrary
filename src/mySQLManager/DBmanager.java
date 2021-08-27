@@ -149,33 +149,6 @@ public class DBmanager {
 					}
 				}
 			}
-			if (way.equals(WayOfGetReader.SEARCH_FOR_NAME)) {
-				try {
-					ps = con.prepareStatement("select * from Accounts where Name = ?");
-					ps.setString(1, account);
-					ResultSet res = ps.executeQuery();
-					if (!res.next()) {
-						return null;
-					}
-					String getAccount = res.getString("Account");
-					String getName = res.getString("Name");
-					boolean isAdmin = res.getBoolean("isAdmin");
-					Reader reader = new Reader(getAccount, getName, isAdmin);
-					return reader;
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} finally {
-					if (ps != null) {
-						try {
-							ps.close();
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			}
 		}
 		return null;
 	}
@@ -187,12 +160,13 @@ public class DBmanager {
 			return;
 		} else {
 			try {
-				ps = con.prepareStatement("UPDATE Accounts SET (Account,Password,isAdmin,Name) = (?,?,?,?) WHERE Account = ?");
+				ps = con.prepareStatement("UPDATE Accounts SET Account=?,Password=?,isAdmin=?,Name=? WHERE Account=?");
 				ps.setString(1, reader.getAccount());
 				ps.setString(2, reader.getPassword());
 				ps.setBoolean(3, reader.isAdmin());
 				ps.setString(4, reader.getName());
 				ps.setString(5, reader.getAccount());
+				ps.execute();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -221,6 +195,7 @@ public class DBmanager {
 			ps.setString(2, reader.getPassword());
 			ps.setBoolean(3, reader.isAdmin());
 			ps.setString(4, reader.getName());
+			ps.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

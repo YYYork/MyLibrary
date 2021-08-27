@@ -3,14 +3,23 @@ package myFrames.systemManager;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileDescriptor;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import myFrames.MainFrame;
+import myObject.Reader;
+import mySQLManager.DBmanager;
+import mySQLManager.WayOfGetReader;
 
 public class UpdateReader extends JPanel{
 	private JPanel updateReaderPanel;
@@ -24,6 +33,8 @@ public class UpdateReader extends JPanel{
 	private JLabel label_updateReaderPanel_isAdmin;
 	private JButton btn_updateReaderPanel_update;
 	private JButton btn_updateReaderPanel_search;
+	private boolean flag_updateReaderPanel = false;//是否查询过
+	private String flag_account = "";//查询模式下的用户
 	
 	private JPanel removeReaderPanel;
 	private JPanel panel_removeReaderPanel_displayReaderInfo;
@@ -31,8 +42,9 @@ public class UpdateReader extends JPanel{
 	private JTextField field_removeReaderPanel_account;
 	private JTextArea area_removeReaderPanel_displayReaderInfo;
 	private JLabel label_removeReaderPanel_account;
-	private JButton btn_removeReaderPanel_search;
 	private JButton btn_removeReaderPanel_remove;//先查询显示信息后显示删除按钮
+	private boolean flag_removeReaderPanel = false;
+	private String flag_removeReaderPanel_account = "";
 	
 	private JPanel addReaderPanel;
 	private JTextField field_addReaderPanel_account;
@@ -69,6 +81,7 @@ public class UpdateReader extends JPanel{
 		addReaderPanel = new JPanel();
 		addReaderPanel();
 		
+		addListener();
 		addTabElement();
 		
 		add(tabPane,BorderLayout.CENTER);
@@ -163,5 +176,140 @@ public class UpdateReader extends JPanel{
 		addReaderPanel.add(field_addReaderPanel_isAdmin);
 		addReaderPanel.add(nullLabel);
 		addReaderPanel.add(btn_addReaderPanel_add);
+	}
+	
+	private void addListener() {
+		btn_addReaderPanel_add.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(	  field_addReaderPanel_account.getText().equals("")
+					||field_addReaderPanel_name.getText().equals("")
+					||field_addReaderPanel_isAdmin.getText().equals("")
+					||field_addReaderPanel_password.getText().equals("")) {
+					JOptionPane.showMessageDialog(MainFrame.instance, "请填上所有的空！");
+					return;
+				}
+				
+				String account = field_addReaderPanel_account.getText();
+				if(!(DBmanager.getReader(account, WayOfGetReader.SEARCH_FOR_ACCOUNT)==null)) {
+					JOptionPane.showMessageDialog(MainFrame.instance, "账号已存在！");
+					return;
+				}else {
+					Reader reader = new Reader(
+							 field_addReaderPanel_account.getText()
+							,field_addReaderPanel_name.getText()
+							,Boolean.valueOf(field_addReaderPanel_isAdmin.getText()).booleanValue()
+							,field_addReaderPanel_password.getText());
+					DBmanager.addReader(reader);
+					field_addReaderPanel_account.setText("");
+					field_addReaderPanel_name.setText("");
+					field_addReaderPanel_isAdmin.setText("");
+					field_addReaderPanel_password.setText("");
+					JOptionPane.showMessageDialog(MainFrame.instance, "用户添加成功！");
+				}
+			}
+		});
+		
+		btn_removeReaderPanel_remove.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String account = field_removeReaderPanel_account.getText();
+				if(account.equals("")) {
+					return;
+				}
+				Reader reader = DBmanager.getReader(account, WayOfGetReader.SEARCH_FOR_ACCOUNT);
+				if(reader == null) {
+					JOptionPane.showMessageDialog(MainFrame.instance, "用户不存在！");
+					return;
+				}
+				if(flag_removeReaderPanel&&account.equals(flag_removeReaderPanel_account)
+						/*
+						 * 检查 是否进入确认模式 和 当前输入的账号是否与刚刚搜索的相匹配
+						 * 如若不是，则开始搜索账号 并 设定 刚刚搜索过的账号
+						 */
+						) {
+					DBmanager.removeReader(reader);
+					JOptionPane.showMessageDialog(MainFrame.instance, "用户删除成功！");
+					area_removeReaderPanel_displayReaderInfo.setText("");
+					flag_removeReaderPanel = false; //退出搜索模式
+				}else {
+					flag_removeReaderPanel_account = account; //设定 刚刚搜索过的账号
+					area_removeReaderPanel_displayReaderInfo.setText("");
+					area_removeReaderPanel_displayReaderInfo.append("-------------------"+"\n");
+					area_removeReaderPanel_displayReaderInfo.append("用户账号："+reader.getAccount()+"\n");
+					area_removeReaderPanel_displayReaderInfo.append("用户昵称："+reader.getName()+"\n");
+					area_removeReaderPanel_displayReaderInfo.append("是否是管理员："+reader.isAdmin()+"\n");
+					area_removeReaderPanel_displayReaderInfo.append("再按一次 删除键 删除用户"+"\n");
+					area_removeReaderPanel_displayReaderInfo.append("-------------------"+"\n");
+					flag_removeReaderPanel = true; //进入搜索模式
+				}
+			}
+		});
+		
+		btn_updateReaderPanel_search.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String account = field_updateReaderPanel_account.getText();
+				if(account.equals("")) {
+					return;
+				}else {
+					Reader reader = DBmanager.getReader(account, WayOfGetReader.SEARCH_FOR_ACCOUNT);
+					if( reader == null) {
+						JOptionPane.showMessageDialog(MainFrame.instance, "该用户不存在");
+						return;
+					}else {
+						field_addReaderPanel_password.setText("");
+						field_updateReaderPanel_name.setText(reader.getName());
+						field_updateReaderPanel_isAdmin.setText(reader.isAdmin()+"");
+						flag_account = account; //设置 刚刚搜索过的用户账号
+						flag_updateReaderPanel = true; //搜索成功
+						return;
+					}
+				}
+			}
+		});
+		
+		btn_updateReaderPanel_update.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String account = field_updateReaderPanel_account.getText();
+				if(!flag_updateReaderPanel) {
+					JOptionPane.showMessageDialog(MainFrame.instance, "请先搜索一次该用户ID，然后再进行更新！");
+					return;
+				}else if(!account.equals(flag_account)){
+					JOptionPane.showMessageDialog(MainFrame.instance, "您写入的账号与刚刚搜索的不同，重新搜索一次此账号吧！");
+					flag_updateReaderPanel = false;
+					return;
+				}
+				/*
+				 * 检查 是否查询过 和 刚刚查询的账号 和 当前写入的账号 是否相同 
+				 * 若不同，则返回
+				 */
+				else {
+				String password = field_updateReaderPanel_password.getText();
+				String name = field_updateReaderPanel_name.getText();
+				String str_isAdmin = field_updateReaderPanel_isAdmin.getText();
+				boolean isAdmin = Boolean.valueOf(str_isAdmin).booleanValue();
+				if(account.equals("")||password.equals("")||name.equals("")||str_isAdmin.equals("")) {
+					JOptionPane.showMessageDialog(MainFrame.instance, "请填上所有的空");
+					return;
+				}else {
+					Reader reader = new Reader(account, name, isAdmin,password);
+					DBmanager.setReader(reader);
+					field_updateReaderPanel_account.setText("");
+					field_updateReaderPanel_password.setText("");
+					field_updateReaderPanel_name.setText("");
+					field_updateReaderPanel_isAdmin.setText("");
+					JOptionPane.showMessageDialog(MainFrame.instance, "修改成功！");
+				}
+			  }
+			}
+		});
 	}
 }

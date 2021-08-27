@@ -3,16 +3,26 @@ package myFrames.basicDataMatiain;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import myFrames.MainFrame;
+import myObject.Book;
+import mySQLManager.BookAdder;
+import mySQLManager.BookFinder;
+import mySQLManager.BookFinderType;
 
 public class BookDataManagePanel extends JPanel{
 	//从书籍预订那边过来的书再选择添加
@@ -21,6 +31,9 @@ public class BookDataManagePanel extends JPanel{
 	private JTextField field_bookAddPanel_bookID;
 	private JLabel label_bookAddPanel_bookID;
 	private JTable table;
+	public static DefaultTableModel tabelModel;
+	private String comName[] = {"书名","种类","出版社"};
+	private String rows[][] = {{"默认","默认","默认"}};
 	private JScrollPane scroPane;
 	private JButton btn_addBook;
 	
@@ -30,8 +43,9 @@ public class BookDataManagePanel extends JPanel{
 	private JTextField field_bookRemovePanel_bookID;
 	private JTextArea area_displayBookInfo;
 	private JLabel label_bookRemovePanel_bookID;
-	private JButton btn_findBook;
 	private JButton btn_removeBook;//先查书，显示书信息，显示删除按钮
+	private boolean flag = false;
+	private String bookconfirmID = "";
 	
 	private JTabbedPane tabPane;
 	
@@ -49,6 +63,7 @@ public class BookDataManagePanel extends JPanel{
 		bookAddPanel();
 		
 		setTabElement();
+		addListener();
 		
 		add(tabPane,BorderLayout.CENTER);
 		
@@ -73,12 +88,81 @@ public class BookDataManagePanel extends JPanel{
 		bookAddPanel_sonBottom.add(label_bookAddPanel_bookID);
 		bookAddPanel_sonBottom.add(field_bookAddPanel_bookID);
 		bookAddPanel_sonBottom.add(btn_addBook);
-		table = new JTable();
+		tabelModel = new DefaultTableModel(rows,comName);
+		table = new JTable(tabelModel);
 		scroPane = new JScrollPane(table);
 		
 		
 		bookAddPanel.add(scroPane);
 		bookAddPanel.add(bookAddPanel_sonBottom);
+	}
+	
+	private void addListener() {
+		btn_addBook.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String bookID = field_bookAddPanel_bookID.getName();
+				int selectRowCount = table.getSelectedRow();
+				if(bookID.equals("")||selectRowCount==-1) {
+					return;
+				}else {
+					String bookName = table.getValueAt(selectRowCount, 1).toString();
+					String bookType = table.getValueAt(selectRowCount, 2).toString();
+					String publisher = table.getValueAt(selectRowCount, 3).toString();
+					Book book = new Book(bookName, bookType, publisher, bookID, false);
+					if(BookFinder.getBooks(BookFinderType.SEARCH_FOR_ID, bookID).isEmpty()){
+						field_bookAddPanel_bookID.setText("");
+						tabelModel.removeRow(selectRowCount);
+						BookAdder.addBook(book);
+						JOptionPane.showMessageDialog(MainFrame.instance, "书籍添加成功");
+					}else {
+						JOptionPane.showMessageDialog(MainFrame.instance, "书籍ID已存在");
+					}
+				}
+			}
+		});
+		
+		btn_removeBook.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String bookID = field_bookRemovePanel_bookID.getText();
+				if(bookID.equals("")) {
+					return;
+				}else if(BookFinder.getBooks(BookFinderType.SEARCH_FOR_ID, bookID).isEmpty()){
+					JOptionPane.showMessageDialog(MainFrame.instance, "书籍不存在！");
+					return;
+				}else {
+					if(flag&&bookconfirmID.equals(bookID)
+					/*
+					 * 检查 是否处于确认模式 和 所搜寻的ID与确认模式下的书籍ID是否相同
+					 * 若不同则重新显示书籍信息 
+					 */
+							) {
+						Book book = BookFinder.getBooks(BookFinderType.SEARCH_FOR_ID, bookID).get(0);
+						BookAdder.removeBook(book);
+						flag = false;	//退出确认模式
+						return;
+					}else {
+						bookconfirmID = bookID;	//设置确认模式的书籍ID
+						Book book = BookFinder.getBooks(BookFinderType.SEARCH_FOR_ID, bookID).get(0);
+						area_displayBookInfo.setText("");	//清屏
+						area_displayBookInfo.append("----------------------"+"\n");
+						area_displayBookInfo.append("书籍ID："+book.getId());
+						area_displayBookInfo.append("书籍名称："+book.getBookName()+"\n");
+						area_displayBookInfo.append("书籍种类："+book.getBookType()+"\n");
+						area_displayBookInfo.append("书籍出版社："+book.getPublisher()+"\n");
+						area_displayBookInfo.append(" 再按一次 删除键 删除此书"+"\n");
+						area_displayBookInfo.append("----------------------"+"\n");
+						flag = true;	//进入确认模式
+						return;
+					}
+				}
+			}
+		});
 	}
 	
 	private void bookRemovePanel() {
